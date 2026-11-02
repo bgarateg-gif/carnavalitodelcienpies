@@ -453,18 +453,30 @@ window.addEventListener("load", () => {
         roundRect(x, yb - h, w, h, 5);
         ctx.fillStyle = COLOR[n.hand]; ctx.fill();
         ctx.lineWidth = 2; ctx.strokeStyle = "#000"; ctx.stroke();
-        if (h >= 16) {
+        
+        // Permite dibujar texto en bloques más delgados (como semicorcheas)
+        if (h >= 8) {
           const yc = yb - h / 2 + 1;
           ctx.fillStyle = "#000";
           if (half) {
-            if (showLetter) { ctx.textAlign = "center"; ctx.font = "bold 12px Georgia, serif"; ctx.fillText(LETTER[n.hand], x + w / 2, yc); }
+            if (showLetter) { 
+              ctx.textAlign = "center"; 
+              const szH = fitSize(LETTER[n.hand], w - 2, 11, "bold");
+              ctx.font = "bold " + szH + "px Georgia, serif"; 
+              ctx.fillText(LETTER[n.hand], x + w / 2, yc); 
+            }
           } else {
             const name = KEYS[n.key].label, pad = showLetter ? 18 : 4;
-            const sz = fitSize(name, w - pad - 2, Math.min(16, h * 0.55), "bold");
+            // Garantiza un tamaño de fuente legible adecuado al ancho disponible
+            const sz = fitSize(name, w - pad - 2, Math.max(10, Math.min(14, w * 0.35)), "bold");
             ctx.font = "bold " + sz + "px Georgia, serif";
             ctx.textAlign = "center";
             ctx.fillText(name, x + (showLetter ? (w + 12) / 2 : w / 2), yc);
-            if (showLetter) { ctx.textAlign = "left"; ctx.font = "bold 10px Georgia, serif"; ctx.fillText(LETTER[n.hand], x + 5, yc); }
+            if (showLetter) { 
+              ctx.textAlign = "left"; 
+              ctx.font = "bold 9px Georgia, serif"; 
+              ctx.fillText(LETTER[n.hand], x + 3, yc); 
+            }
           }
         }
         ctx.restore();
